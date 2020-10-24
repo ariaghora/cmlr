@@ -3,7 +3,6 @@
 mat *allocatemat(long r, long c) {
     mat *m = malloc(sizeof(mat));
     m->data = calloc(r * c, sizeof(double));
-    // m->data = malloc(r * c * sizeof(double));
     m->r = r;
     m->c = c;
     return m;
