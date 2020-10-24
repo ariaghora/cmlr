@@ -2,7 +2,20 @@
 #include <time.h>
 #include "mat.h"
 
+void show_help() {
+    printf("fitlinreg version 0.1.0 - A Fast Multiple Linear Regression\n"
+           "Copyright (C) 2020 Aria Ghora Prabono \n"
+           "Usage: fitlinreg [-f filename][-h]\n"
+           "\n"
+           "Options:\n"
+           "  -f   set input filename\n"
+           "  -h   show this help\n"
+           "  -s   show summary\n"
+           );
+}
+
 int main(int argc, char *argv[]) {
+    char *filename = "";
     long ds_row    = 768;
     long ds_col    = 10;
     long feat_row  = 768;
@@ -14,13 +27,28 @@ int main(int argc, char *argv[]) {
 
     // training params
     long optimize_bias = 1;
-    long print_summary = 1;
+    long print_summary = 0;
     long max_iter      = 1000;
 
     clock_t t;
     double time_taken;
     double mse;
     double dbias;
+
+    for (int i = 0; i < argc; i++) {
+        if (strcmp(argv[i], "-f") == 0) {
+            if (i < argc - 1) filename = argv[i + 1];
+        }
+
+        if (strcmp(argv[i], "-s") == 0) {
+            print_summary = 1;
+        }
+    }
+
+    if (filename[0] == '\0') {
+        show_help();
+        return -1;
+    }
 
     mat *dataset = read_csv("energy_std.csv", ds_row, ds_col, ",");
 

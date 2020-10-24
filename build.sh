@@ -2,8 +2,8 @@
 
 echo 'compiling fitlinreg.c';
 
-gcc -g -o fitlinreg.bin \
+gcc -O3 -g -o fitlinreg.bin \
     *.c \
-    -lopenblas -lpthread  -Wall;
+    -lopenblas -Wall;
 
 echo 'compiling finished';
