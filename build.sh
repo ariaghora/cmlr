@@ -1,8 +1,8 @@
 #!/bin/bash
 
-echo 'compiling fitlogistic.c';
+echo 'compiling fitlinreg.c';
 
-gcc -g -o fitlogistic.bin \
+gcc -g -o fitlinreg.bin \
     *.c \
     -lopenblas -lpthread  -Wall;
 
