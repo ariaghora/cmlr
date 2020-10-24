@@ -2,7 +2,7 @@
 
 echo 'compiling fitlogistic.c';
 
-gcc -o fitlogistic.bin \
+gcc -g -o fitlogistic.bin \
     *.c \
     -lopenblas -lpthread  -Wall;
 

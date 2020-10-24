@@ -2,7 +2,8 @@
 
 mat *allocatemat(long r, long c) {
     mat *m = malloc(sizeof(mat));
-    m->data = malloc(sizeof(double) * r * c);
+    m->data = calloc(r * c, sizeof(double));
+    // m->data = malloc(r * c * sizeof(double));
     m->r = r;
     m->c = c;
     return m;
@@ -44,15 +45,34 @@ long matsize(mat *m) {
     return m->r * m->c;
 }
 
-void matmul(mat *a, mat *b, mat *out) {
-    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans,
-        a->r, b->c, b->r,
+void matmul(mat *a, mat *b, long tr_a, long tr_b, mat *out) {
+    long a_trans = tr_a == 0 ? CblasNoTrans : CblasTrans;
+    long b_trans = tr_b == 0 ? CblasNoTrans : CblasTrans;
+
+    int A_height = tr_a ? a->c  : a->r;
+    int A_width  = tr_a ? a->r : a->c;
+    int B_width  = tr_b ? b->r : b->c;
+    int m = A_height;
+    int n = B_width;
+    int k = A_width;
+
+    int lda = tr_a ? m : k;
+    int ldb = tr_b ? k : n;
+
+    cblas_dgemm(CblasRowMajor, a_trans, b_trans,
+        m, n, k,
         1,
-        a->data, b->r,
-        b->data, b->c,
+        a->data, lda,
+        b->data, ldb,
         1,
-        out->data, 1
+        out->data, n
     );
+}
+
+void mul(mat *a, mat *b, mat *out) {
+    for (int i = 0; i < a->r * a->c; i++) {
+        out->data[i] = a->data[i] * b->data[i];
+    }
 }
 
 void addscalar(mat *a, double x, mat *out) {
@@ -78,9 +98,10 @@ void matrange(mat *m, long row, long col, long height, long width, mat*out) {
 }
 
 void printmat(mat *m) {
+    int off = 0;
     for (long r = 0; r < m->r; r++) {
         for (long c = 0; c < m->c; c++) {
-            printf("%.3f ", m->data[m->c * r + c]);
+            printf("%.3f ", m->data[off++]);
         }
         printf("\n");
     }
