@@ -1,3 +1,9 @@
+#include <cblas.h>
+#include <ctype.h>
+#include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "mat.h"
 
 mat *allocatemat(long r, long c) {

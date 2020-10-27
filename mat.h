@@ -1,13 +1,6 @@
 #ifndef MAT_H
 #define MAT_H
 
-#include <cblas.h>
-#include <ctype.h>
-#include <limits.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 typedef struct {
     double *data;
     long r;
