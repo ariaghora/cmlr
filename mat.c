@@ -31,13 +31,17 @@ mat *read_csv(char *filename, long row, long col, char *delim) {
 
     mat *outdata = allocatemat(row, col);
 
-    while (getline(&line, &len, fp) != -1) {   
+    int r_cnt = 0;
+    while ((getline(&line, &len, fp) != -1) && (r_cnt < row)) {   
         char *pch = strtok(line, delim);
 
-        while (pch != NULL) {
+        for (int i = 0; i < col; i++) {
             outdata->data[arr_sz++] = strtod(pch, &endptr);
             pch = strtok(NULL, delim);
         }
+        pch = NULL;
+
+        r_cnt++;
     }
 
     free(line);
